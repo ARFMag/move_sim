@@ -2,7 +2,6 @@ import pygame
 import numpy as np
 from random import randint
 
-sim_time = True
 yellow = (153, 153, 0)
 blue = (0, 0, 255)
 grey = (224, 224, 224)
@@ -201,14 +200,27 @@ class Ball:
         self.update_position()
 
 
-def run():  # TODO: make a class
-    pygame.init()
-    sim = Sim(1000, 1000)
-    ball_list = [Ball(sim, ball_size=24), Ball(sim, ball_speed=(4, 4)), Ball(sim), Ball(sim)]
-    while sim_time is True:
-        sim.refresh_screen()
-        for i in range(len(ball_list)):
-            ball_list[i].move(sim)
+class Run:
+
+    def __init__(self, width=1000, height=1000):
+        pygame.init()
+        self.sim = Sim(width, height)
+        self.sim_time = True
+        self.ball_list = []
+
+    def ball_setup(self, num_balls=4):
+        for _ in range(num_balls):
+            self.ball_list.append(Ball(self.sim))
+
+    def run_sim(self):
+        while self.sim_time:
+            self.sim.refresh_screen()
+            for i in range(len(self.ball_list)):
+                self.ball_list[i].move(self.sim)
 
 
-run()
+game1 = Run()
+game1.ball_setup(25)
+game1.run_sim()
+
+
